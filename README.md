@@ -3,7 +3,7 @@
 This repository contains the backend for
 the [Finitequiz minigame](https://gamifyit-docs.readthedocs.io/en/latest/user-manuals/minigames/finitequiz.html).
 
-It persists the game data (configurations, game results, etc.), in a database and communicates with other backend
+It persists the game data (configurations, game results, etc.) in a database and communicates with other backend
 services.
 
 ## Table of contents
