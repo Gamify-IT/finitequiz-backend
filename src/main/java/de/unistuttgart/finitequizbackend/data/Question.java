@@ -6,10 +6,13 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * The Question.class contains the question related information
@@ -18,13 +21,19 @@ import lombok.experimental.FieldDefaults;
 @Data
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Validated
 public class Question {
 
     @Id
     @GeneratedValue(generator = "uuid")
     UUID id;
 
+    @NotNull(message = "question text cannot be null")
+    @NotBlank(message = "question text cannot be blank")
     String text;
+
+    @NotNull(message = "right answer cannot be null")
+    @NotBlank(message = "right answer cannot be blank")
     String rightAnswer;
 
     @ElementCollection

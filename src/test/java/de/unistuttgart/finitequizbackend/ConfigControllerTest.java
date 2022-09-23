@@ -223,6 +223,7 @@ class ConfigControllerTest {
     @Test
     void removeQuestionFromExistingConfiguration() throws Exception {
         final QuestionDTO removedQuestionDTO = initialConfigDTO.getQuestions().stream().findFirst().get();
+        assert removedQuestionDTO.getId() != null;
         assertTrue(questionRepository.existsById(removedQuestionDTO.getId()));
 
         final MvcResult result = mvc

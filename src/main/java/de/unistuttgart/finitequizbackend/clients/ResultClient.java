@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @FeignClient(value = "resultClient", url = "${overworld.url}/internal")
 public interface ResultClient {
+    /**
+     * Submits the resultDTO to the Overworld-Backend
+     *
+     * @param resultDTO the player submitted result, trimmed down to the data needed for the overworld
+     */
     @PostMapping("/submit-game-pass")
     @Headers("Content-Type: application/json")
     void submit(OverworldResultDTO resultDTO);

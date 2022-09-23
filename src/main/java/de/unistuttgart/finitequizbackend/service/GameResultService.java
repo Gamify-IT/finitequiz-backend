@@ -8,6 +8,7 @@ import feign.FeignException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,7 +62,7 @@ public class GameResultService {
      * @param gameResultDTO extern gameResultDTO
      * @throws IllegalArgumentException if at least one of the arguments is null
      */
-    public void saveGameResult(final GameResultDTO gameResultDTO, final String userId) {
+    public void saveGameResult(final @Valid GameResultDTO gameResultDTO, final String userId) {
         if (gameResultDTO == null || userId == null) {
             throw new IllegalArgumentException("gameResultDTO or userId is null");
         }
@@ -80,7 +81,7 @@ public class GameResultService {
             final List<RoundResult> correctQuestions =
                 this.castQuestionList(gameResultDTO.getCorrectAnsweredQuestions());
             final List<RoundResult> wrongQuestions = this.castQuestionList(gameResultDTO.getWrongAnsweredQuestions());
-            final GameResult result = new GameResult(
+            final GameResult result = new @Valid GameResult(
                 gameResultDTO.getQuestionCount(),
                 gameResultDTO.getScore(),
                 correctQuestions,

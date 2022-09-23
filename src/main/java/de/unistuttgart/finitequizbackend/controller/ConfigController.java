@@ -10,10 +10,12 @@ import de.unistuttgart.gamifyit.authentificationvalidator.JWTValidatorService;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/configurations")
 @Import({ JWTValidatorService.class })
 @Slf4j
+@Validated
 public class ConfigController {
 
     @Autowired
@@ -61,7 +64,7 @@ public class ConfigController {
     @ResponseStatus(HttpStatus.CREATED)
     public ConfigurationDTO createConfiguration(
         @CookieValue("access_token") final String accessToken,
-        @RequestBody final ConfigurationDTO configurationDTO
+        @Valid @RequestBody final ConfigurationDTO configurationDTO
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
         jwtValidatorService.hasRolesOrThrow(accessToken, List.of("lecturer"));
@@ -73,7 +76,7 @@ public class ConfigController {
     public ConfigurationDTO updateConfiguration(
         @CookieValue("access_token") final String accessToken,
         @PathVariable final UUID id,
-        @RequestBody final ConfigurationDTO configurationDTO
+        @Valid @RequestBody final ConfigurationDTO configurationDTO
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
         jwtValidatorService.hasRolesOrThrow(accessToken, List.of("lecturer"));
@@ -97,7 +100,7 @@ public class ConfigController {
     public QuestionDTO addQuestionToConfiguration(
         @CookieValue("access_token") final String accessToken,
         @PathVariable final UUID id,
-        @RequestBody final QuestionDTO questionDTO
+        @Valid @RequestBody final QuestionDTO questionDTO
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
         jwtValidatorService.hasRolesOrThrow(accessToken, List.of("lecturer"));
@@ -122,7 +125,7 @@ public class ConfigController {
         @CookieValue("access_token") final String accessToken,
         @PathVariable final UUID id,
         @PathVariable final UUID questionId,
-        @RequestBody final QuestionDTO questionDTO
+        @Valid @RequestBody final QuestionDTO questionDTO
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
         jwtValidatorService.hasRolesOrThrow(accessToken, List.of("lecturer"));

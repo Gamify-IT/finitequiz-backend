@@ -3,12 +3,15 @@ package de.unistuttgart.finitequizbackend.data;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.lang.Nullable;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * The QuestionDTO.class contains the question related information
@@ -17,13 +20,20 @@ import org.springframework.lang.Nullable;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Validated
 public class QuestionDTO {
 
     @Nullable
     UUID id;
 
+    @NotNull(message = "question text cannot be null")
+    @NotBlank(message = "question text cannot be blank")
     String text;
+
+    @NotNull(message = "right answer cannot be null")
+    @NotBlank(message = "right answer cannot be blank")
     String rightAnswer;
+
     Set<String> wrongAnswers;
 
     public QuestionDTO(final String text, final String rightAnswer, final Set<String> wrongAnswers) {

@@ -10,6 +10,7 @@ import de.unistuttgart.finitequizbackend.repositories.ConfigurationRepository;
 import de.unistuttgart.finitequizbackend.repositories.QuestionRepository;
 import java.util.Optional;
 import java.util.UUID;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -66,7 +67,7 @@ public class ConfigService {
      * @return the saved configuration as DTO
      * @throws IllegalArgumentException if at least one of the arguments is null
      */
-    public ConfigurationDTO saveConfiguration(final ConfigurationDTO configurationDTO) {
+    public ConfigurationDTO saveConfiguration(final @Valid ConfigurationDTO configurationDTO) {
         if (configurationDTO == null) {
             throw new IllegalArgumentException("configurationDTO is null");
         }
@@ -85,7 +86,7 @@ public class ConfigService {
      * @throws ResponseStatusException  when configuration with the id does not exist
      * @throws IllegalArgumentException if at least one of the arguments is null
      */
-    public ConfigurationDTO updateConfiguration(final UUID id, final ConfigurationDTO configurationDTO) {
+    public ConfigurationDTO updateConfiguration(final UUID id, @Valid final ConfigurationDTO configurationDTO) {
         if (id == null || configurationDTO == null) {
             throw new IllegalArgumentException("id or configurationDTO is null");
         }
@@ -121,7 +122,7 @@ public class ConfigService {
      * @throws ResponseStatusException  when configuration with the id does not exist
      * @throws IllegalArgumentException if at least one of the arguments is null
      */
-    public QuestionDTO addQuestionToConfiguration(final UUID id, final QuestionDTO questionDTO) {
+    public QuestionDTO addQuestionToConfiguration(final UUID id, final @Valid QuestionDTO questionDTO) {
         if (id == null || questionDTO == null) {
             throw new IllegalArgumentException("id or questionDTO is null");
         }
@@ -172,7 +173,7 @@ public class ConfigService {
     public QuestionDTO updateQuestionFromConfiguration(
         final UUID id,
         final UUID questionId,
-        final QuestionDTO questionDTO
+        final @Valid QuestionDTO questionDTO
     ) {
         if (id == null || questionId == null || questionDTO == null) {
             throw new IllegalArgumentException("id or questionId or questionDTO is null");
@@ -197,7 +198,10 @@ public class ConfigService {
      * @throws ResponseStatusException  when question with the id in the given configuration does not exist
      * @throws IllegalArgumentException if at least one of the arguments is null
      */
-    private Optional<Question> getQuestionInConfiguration(final UUID questionId, final Configuration configuration) {
+    private Optional<Question> getQuestionInConfiguration(
+        final UUID questionId,
+        final @Valid Configuration configuration
+    ) {
         if (questionId == null || configuration == null) {
             throw new IllegalArgumentException("questionId or configuration is null");
         }

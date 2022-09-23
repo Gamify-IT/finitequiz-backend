@@ -19,6 +19,7 @@ services.
     * [With Docker](#with-docker)
   * [Testing Database](#testing-database)
 * [Class Diagrams](#class-diagrams)
+* [Constants](#constants)
 <!-- TOC -->
 
 ## Links
@@ -133,3 +134,12 @@ docker stop finitequiz-database
 ![ConfigController](assets/ConfigService.svg)
 
 ![GameResultController](assets/GameResult.svg)
+
+## Constants
+
+To prevent incorrect or cheated data, all important values are checked for logic.
+The field borders are configured in `src/main/java/de/unistuttgart/finitequizbackend/Constants.java`.
+
+1. `MIN_QUESTION_COUNT` minimal number of questions a player can answer correctly
+2. `MAX_QUESTION_COUNT` maximal number of questions a player can answer correctly
+3. `MIN/MAX_SCORE` should not be changed
