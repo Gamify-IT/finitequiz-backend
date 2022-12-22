@@ -73,7 +73,6 @@ public class GameResultService {
             gameResultDTO.getQuestionCount()
         );
         final OverworldResultDTO resultDTO = new OverworldResultDTO(
-            "FINITEQUIZ",
             gameResultDTO.getConfigurationAsUUID(),
             resultScore,
             userId
@@ -112,7 +111,7 @@ public class GameResultService {
      * @return score as int in %
      * @throws IllegalArgumentException if correctAnswers < 0 || numberOfQuestions < correctAnswers
      */
-    private int calculateResultScore(final int correctAnswers, final int numberOfQuestions) {
+    public int calculateResultScore(final int correctAnswers, final int numberOfQuestions) {
         if (correctAnswers < 0 || numberOfQuestions < correctAnswers) {
             throw new IllegalArgumentException(
                 String.format(
