@@ -49,8 +49,7 @@ public class StatisticController {
         @PathVariable final UUID id
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
-        log.debug("get configuration {}", id);
+        log.debug("get problematic questions statistic of configuration {}", id);
         return statisticService.getProblematicQuestions(id);
     }
-
 }

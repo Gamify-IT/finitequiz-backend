@@ -32,6 +32,12 @@ public class StatisticService {
     @Autowired
     private GameResultRepository gameResultRepository;
 
+    /**
+     * Returns a list of the most problematic questions of a minigame
+     *
+     * @param configurationId the configuration id of the minigame
+     * @return a list of the most problematic questions of a minigame
+     */
     public List<ProblematicQuestion> getProblematicQuestions(UUID configurationId) {
         Configuration configuration = configService.getConfiguration(configurationId);
         List<GameResult> gameResults = gameResultRepository.findByConfigurationAsUUID(configurationId);
