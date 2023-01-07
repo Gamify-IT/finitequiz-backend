@@ -5,6 +5,7 @@ import de.unistuttgart.finitequizbackend.data.QuestionDTO;
 import de.unistuttgart.finitequizbackend.data.mapper.ConfigurationMapper;
 import de.unistuttgart.finitequizbackend.data.mapper.QuestionMapper;
 import de.unistuttgart.finitequizbackend.data.statistic.ProblematicQuestion;
+import de.unistuttgart.finitequizbackend.data.statistic.TimeSpentDistribution;
 import de.unistuttgart.finitequizbackend.repositories.ConfigurationRepository;
 import de.unistuttgart.finitequizbackend.service.ConfigService;
 import de.unistuttgart.finitequizbackend.service.StatisticService;
@@ -52,4 +53,15 @@ public class StatisticController {
         log.debug("get problematic questions statistic of configuration {}", id);
         return statisticService.getProblematicQuestions(id);
     }
+
+    @GetMapping("/{id}/time-spent")
+    public List<TimeSpentDistribution> getTimeSpentStatistcOfMinigame(
+            @CookieValue("access_token") final String accessToken,
+            @PathVariable final UUID id
+    ) {
+        jwtValidatorService.validateTokenOrThrow(accessToken);
+        log.debug("get time spent statistic of configuration {}", id);
+        return statisticService.getTimeSpentDistributions(id);
+    }
+
 }

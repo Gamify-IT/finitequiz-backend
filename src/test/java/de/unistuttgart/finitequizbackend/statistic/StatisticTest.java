@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.unistuttgart.finitequizbackend.data.*;
 import de.unistuttgart.finitequizbackend.data.mapper.QuestionMapper;
 import de.unistuttgart.finitequizbackend.data.statistic.ProblematicQuestion;
+import de.unistuttgart.finitequizbackend.data.statistic.TimeSpentDistribution;
 import de.unistuttgart.finitequizbackend.repositories.ConfigurationRepository;
 import de.unistuttgart.finitequizbackend.repositories.GameResultRepository;
 import de.unistuttgart.finitequizbackend.service.GameResultService;
@@ -120,6 +121,7 @@ public class StatisticTest {
         }
         gameResult1.setCorrectAnsweredQuestions(rightAnswers1);
         gameResult1.setWrongAnsweredQuestions(wrongAnswers1);
+        gameResult1.setTimeSpent(60);
 
         GameResult gameResult2 = new GameResult();
         gameResult2.setConfigurationAsUUID(staticConfiguration.getId());
@@ -133,6 +135,7 @@ public class StatisticTest {
         }
         gameResult2.setCorrectAnsweredQuestions(rightAnswers2);
         gameResult2.setWrongAnsweredQuestions(wrongAnswers2);
+        gameResult2.setTimeSpent(100);
 
         GameResult gameResult3 = new GameResult();
         gameResult3.setConfigurationAsUUID(staticConfiguration.getId());
@@ -148,6 +151,7 @@ public class StatisticTest {
         }
         gameResult3.setCorrectAnsweredQuestions(rightAnswers3);
         gameResult3.setWrongAnsweredQuestions(wrongAnswers3);
+        gameResult3.setTimeSpent(200);
 
         GameResult gameResult4 = new GameResult();
         gameResult4.setConfigurationAsUUID(staticConfiguration.getId());
@@ -163,6 +167,7 @@ public class StatisticTest {
         }
         gameResult4.setCorrectAnsweredQuestions(rightAnswers4);
         gameResult4.setWrongAnsweredQuestions(wrongAnswers4);
+        gameResult4.setTimeSpent(300);
 
         problematicQuestion = questionMapper.questionToQuestionDTO(questionList.get(5));
         bestAnsweredQuestion = questionMapper.questionToQuestionDTO(questionList.get(0));
@@ -175,7 +180,7 @@ public class StatisticTest {
     }
 
     @Test
-    public void testGetAllGameResults() throws Exception {
+    public void testGetProblematicQuestions() throws Exception {
         final MvcResult result = mvc
                 .perform(get(API_URL + "/" + staticConfiguration.getId() + "/problematic-questions").cookie(cookie).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -195,5 +200,19 @@ public class StatisticTest {
         assertFalse(problematicQuestions.stream().map(ProblematicQuestion::getQuestion).anyMatch(question -> question.equals(bestAnsweredQuestion)));
         assertEquals(problematicQuestion, problematicQuestions.get(0).getQuestion());
         assertSame(5, problematicQuestions.size());
+    }
+
+    @Test
+    public void testGetTimeSpentDistribution() throws Exception {
+        final MvcResult result = mvc
+                .perform(get(API_URL + "/" + staticConfiguration.getId() + "/time-spent").cookie(cookie).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        final List<TimeSpentDistribution> timeSpentDistributions = Arrays.asList(
+                objectMapper.readValue(result.getResponse().getContentAsString(), TimeSpentDistribution[].class)
+        );
+
+        // TODO: make good tests
     }
 }

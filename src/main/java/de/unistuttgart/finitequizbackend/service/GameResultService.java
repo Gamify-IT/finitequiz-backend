@@ -85,6 +85,7 @@ public class GameResultService {
             final GameResult result = new @Valid GameResult(
                 gameResultDTO.getQuestionCount(),
                 gameResultDTO.getScore(),
+                gameResultDTO.getTimeSpent(),
                 correctQuestions,
                 wrongQuestions,
                 gameResultDTO.getConfigurationAsUUID(),

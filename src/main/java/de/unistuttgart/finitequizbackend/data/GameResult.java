@@ -81,9 +81,15 @@ public class GameResult {
     @CreationTimestamp
     private Date playedTime;
 
+    /**
+     * The time spent in seconds on the game for this run.
+     */
+    private long timeSpent;
+
     public GameResult(
         final int questionCount,
         final long score,
+        final long timeSpent,
         final List<RoundResult> correctAnsweredQuestions,
         final List<RoundResult> wrongAnsweredQuestions,
         final UUID configurationAsUUID,
@@ -91,6 +97,7 @@ public class GameResult {
     ) {
         this.questionCount = questionCount;
         this.score = score;
+        this.timeSpent = timeSpent;
         this.correctAnsweredQuestions = correctAnsweredQuestions;
         this.wrongAnsweredQuestions = wrongAnsweredQuestions;
         this.configurationAsUUID = configurationAsUUID;
