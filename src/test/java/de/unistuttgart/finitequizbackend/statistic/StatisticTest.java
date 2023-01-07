@@ -1,5 +1,10 @@
 package de.unistuttgart.finitequizbackend.statistic;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.unistuttgart.finitequizbackend.data.*;
 import de.unistuttgart.finitequizbackend.data.mapper.QuestionMapper;
@@ -9,6 +14,8 @@ import de.unistuttgart.finitequizbackend.repositories.ConfigurationRepository;
 import de.unistuttgart.finitequizbackend.repositories.GameResultRepository;
 import de.unistuttgart.finitequizbackend.service.GameResultService;
 import de.unistuttgart.gamifyit.authentificationvalidator.JWTValidatorService;
+import java.util.*;
+import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -19,14 +26,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import javax.servlet.http.Cookie;
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -48,11 +47,13 @@ public class StatisticTest {
 
     @Autowired
     private GameResultService gameResultService;
+
     @Autowired
     private QuestionMapper questionMapper;
 
     @Autowired
     private ConfigurationRepository configurationRepository;
+
     private ObjectMapper objectMapper;
 
     private Configuration randomConfiguration;
@@ -143,7 +144,7 @@ public class StatisticTest {
         gameResult3.setPlayedTime(new Date());
         List<RoundResult> wrongAnswers3 = new ArrayList<>();
         List<RoundResult> rightAnswers3 = new ArrayList<>();
-        for (int i = 0 ; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             rightAnswers3.add(new RoundResult(questionList.get(i), questionList.get(i).getRightAnswer()));
         }
         for (int i = 2; i < questionList.size(); i++) {
@@ -159,7 +160,7 @@ public class StatisticTest {
         gameResult4.setPlayedTime(new Date());
         List<RoundResult> wrongAnswers4 = new ArrayList<>();
         List<RoundResult> rightAnswers4 = new ArrayList<>();
-        for (int i = 0 ; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             rightAnswers4.add(new RoundResult(questionList.get(i), questionList.get(i).getRightAnswer()));
         }
         for (int i = 5; i < questionList.size(); i++) {
@@ -174,7 +175,6 @@ public class StatisticTest {
 
         gameResultRepository.saveAll(List.of(gameResult1, gameResult2, gameResult3, gameResult4));
 
-
         objectMapper = new ObjectMapper();
         doNothing().when(jwtValidatorService).validateTokenOrThrow("testToken");
     }
@@ -182,22 +182,30 @@ public class StatisticTest {
     @Test
     public void testGetProblematicQuestions() throws Exception {
         final MvcResult result = mvc
-                .perform(get(API_URL + "/" + staticConfiguration.getId() + "/problematic-questions").cookie(cookie).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
+            .perform(
+                get(API_URL + "/" + staticConfiguration.getId() + "/problematic-questions")
+                    .cookie(cookie)
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andExpect(status().isOk())
+            .andReturn();
 
         final List<ProblematicQuestion> problematicQuestions = Arrays.asList(
-                objectMapper.readValue(result.getResponse().getContentAsString(), ProblematicQuestion[].class)
+            objectMapper.readValue(result.getResponse().getContentAsString(), ProblematicQuestion[].class)
         );
 
-
-
         for (int i = 0; i < problematicQuestions.size() - 1; i++) {
-            assertTrue(problematicQuestions.get(i).getWrongAnswers() >= problematicQuestions.get(i+1).getWrongAnswers());
+            assertTrue(
+                problematicQuestions.get(i).getWrongAnswers() >= problematicQuestions.get(i + 1).getWrongAnswers()
+            );
         }
 
-
-        assertFalse(problematicQuestions.stream().map(ProblematicQuestion::getQuestion).anyMatch(question -> question.equals(bestAnsweredQuestion)));
+        assertFalse(
+            problematicQuestions
+                .stream()
+                .map(ProblematicQuestion::getQuestion)
+                .anyMatch(question -> question.equals(bestAnsweredQuestion))
+        );
         assertEquals(problematicQuestion, problematicQuestions.get(0).getQuestion());
         assertSame(5, problematicQuestions.size());
     }
@@ -205,14 +213,17 @@ public class StatisticTest {
     @Test
     public void testGetTimeSpentDistribution() throws Exception {
         final MvcResult result = mvc
-                .perform(get(API_URL + "/" + staticConfiguration.getId() + "/time-spent").cookie(cookie).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn();
+            .perform(
+                get(API_URL + "/" + staticConfiguration.getId() + "/time-spent")
+                    .cookie(cookie)
+                    .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andExpect(status().isOk())
+            .andReturn();
 
         final List<TimeSpentDistribution> timeSpentDistributions = Arrays.asList(
-                objectMapper.readValue(result.getResponse().getContentAsString(), TimeSpentDistribution[].class)
+            objectMapper.readValue(result.getResponse().getContentAsString(), TimeSpentDistribution[].class)
         );
-
         // TODO: make good tests
     }
 }

@@ -79,7 +79,7 @@ public class GameResult {
 
     @NotNull(message = "playedTime cannot be null")
     @CreationTimestamp
-    private Date playedTime;
+    private Date playedTime = new Date();
 
     /**
      * The time spent in seconds on the game for this run.

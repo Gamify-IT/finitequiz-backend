@@ -64,7 +64,11 @@ public class GameResultService {
      * @param accessToken accessToken of the user
      * @throws IllegalArgumentException if at least one of the arguments is null
      */
-    public void saveGameResult(final @Valid GameResultDTO gameResultDTO, final String userId, final String accessToken) {
+    public void saveGameResult(
+        final @Valid GameResultDTO gameResultDTO,
+        final String userId,
+        final String accessToken
+    ) {
         if (gameResultDTO == null || userId == null || accessToken == null) {
             throw new IllegalArgumentException("gameResultDTO or userId is null");
         }

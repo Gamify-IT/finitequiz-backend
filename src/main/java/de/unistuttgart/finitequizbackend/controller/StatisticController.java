@@ -10,17 +10,16 @@ import de.unistuttgart.finitequizbackend.repositories.ConfigurationRepository;
 import de.unistuttgart.finitequizbackend.service.ConfigService;
 import de.unistuttgart.finitequizbackend.service.StatisticService;
 import de.unistuttgart.gamifyit.authentificationvalidator.JWTValidatorService;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 
 /**
  * This controller handles all game-configuration-related REST-APIs
@@ -56,12 +55,11 @@ public class StatisticController {
 
     @GetMapping("/{id}/time-spent")
     public List<TimeSpentDistribution> getTimeSpentStatistcOfMinigame(
-            @CookieValue("access_token") final String accessToken,
-            @PathVariable final UUID id
+        @CookieValue("access_token") final String accessToken,
+        @PathVariable final UUID id
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
         log.debug("get time spent statistic of configuration {}", id);
         return statisticService.getTimeSpentDistributions(id);
     }
-
 }

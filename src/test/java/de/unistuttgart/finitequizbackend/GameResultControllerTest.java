@@ -76,6 +76,7 @@ class GameResultControllerTest {
     @BeforeEach
     public void createBasicData() throws IOException {
         ResultMocks.setupMockBooksResponse(mockResultsService);
+        gameResultRepository.deleteAll();
         configurationRepository.deleteAll();
         initialQuestion1 = new Question();
         initialQuestion1.setText("Are you cool?");

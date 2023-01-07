@@ -38,5 +38,4 @@ public class TimeSpentDistribution {
     public void addCount() {
         count++;
     }
-
 }
