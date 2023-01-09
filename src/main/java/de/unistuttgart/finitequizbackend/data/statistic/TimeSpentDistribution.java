@@ -15,20 +15,20 @@ public class TimeSpentDistribution {
     /**
      * The start of the percentage of game results that took between fromTime and toTime to finish.
      */
-    long fromPercentage;
+    double fromPercentage;
     /**
      * The end of the percentage of game results that took between fromTime and toTime to finish.
      */
-    long toPercentage;
+    double toPercentage;
 
     /**
      * The lower bound of time game results that spent time on the quiz.
      */
-    long fromTime;
+    double fromTime;
     /**
      * The upper bound of time game results that spent time on the quiz.
      */
-    long toTime;
+    double toTime;
 
     /**
      * The amount of game results that took between fromTime and toTime to finish.

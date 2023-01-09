@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class StatisticService {
 
     static final int MAX_PROBLEMATIC_QUESTIONS = 5;
-    static final int[] TIME_SPENT_DISTRIBUTION_PERCENTAGES = { 0, 10, 50, 90, 100 };
+    static final int[] TIME_SPENT_DISTRIBUTION_PERCENTAGES = { 0, 25, 50, 75, 100 };
 
     @Autowired
     private ConfigService configService;
@@ -101,6 +101,15 @@ public class StatisticService {
      * @return a list of the time spent distribution of a minigame
      */
     public List<TimeSpentDistribution> getTimeSpentDistributions(final UUID configurationId) {
+        if (TIME_SPENT_DISTRIBUTION_PERCENTAGES.length < 2) {
+            throw new IllegalArgumentException("TIME_SPENT_DISTRIBUTION_PERCENTAGES must have at least 2 elements");
+        }
+        if (TIME_SPENT_DISTRIBUTION_PERCENTAGES[0] != 0) {
+            throw new IllegalArgumentException("TIME_SPENT_DISTRIBUTION_PERCENTAGES must start with 0");
+        }
+        if (TIME_SPENT_DISTRIBUTION_PERCENTAGES[TIME_SPENT_DISTRIBUTION_PERCENTAGES.length - 1] != 100) {
+            throw new IllegalArgumentException("TIME_SPENT_DISTRIBUTION_PERCENTAGES must end with 100");
+        }
         final List<GameResult> gameResults = gameResultRepository.findByConfigurationAsUUID(configurationId);
         final List<TimeSpentDistribution> timeSpentDistributions = new ArrayList<>();
         for (int i = 0; i < TIME_SPENT_DISTRIBUTION_PERCENTAGES.length - 1; i++) {
@@ -125,10 +134,7 @@ public class StatisticService {
         // TODO: make this work that every timedistrubution has the correct amount of counts
         for (TimeSpentDistribution timeSpentDistribution : timeSpentDistributions) {
             GameResult gameResult = null;
-            while (
-                currentGameResultIndex <= (timeSpentDistribution.getToPercentage() / 100L) * gameResults.size() &&
-                currentGameResultIndex < gameResults.size()
-            ) {
+            while (currentGameResultIndex < (timeSpentDistribution.getToPercentage() / 100.0) * gameResults.size()) {
                 gameResult = gameResults.get(currentGameResultIndex);
                 if (timeSpentDistribution.getFromTime() == 0) {
                     timeSpentDistribution.setFromTime(gameResult.getTimeSpent());

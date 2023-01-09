@@ -58,6 +58,7 @@ public class StatisticTest {
 
     private Configuration randomConfiguration;
     private Configuration staticConfiguration;
+    int numberOfGameResultsOfStaticConfiguration;
     private QuestionDTO problematicQuestion;
     private QuestionDTO bestAnsweredQuestion;
     private List<GameResult> gameResults;
@@ -170,6 +171,8 @@ public class StatisticTest {
         gameResult4.setWrongAnsweredQuestions(wrongAnswers4);
         gameResult4.setTimeSpent(300);
 
+        numberOfGameResultsOfStaticConfiguration = 4;
+
         problematicQuestion = questionMapper.questionToQuestionDTO(questionList.get(5));
         bestAnsweredQuestion = questionMapper.questionToQuestionDTO(questionList.get(0));
 
@@ -224,6 +227,7 @@ public class StatisticTest {
         final List<TimeSpentDistribution> timeSpentDistributions = Arrays.asList(
             objectMapper.readValue(result.getResponse().getContentAsString(), TimeSpentDistribution[].class)
         );
-        // TODO: make good tests
+        long amountOfGameResults = timeSpentDistributions.stream().map(TimeSpentDistribution::getCount).count();
+        assertEquals(numberOfGameResultsOfStaticConfiguration, amountOfGameResults);
     }
 }
