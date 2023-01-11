@@ -10,9 +10,9 @@ services:
     restart: on-failure
     environment:
       POSTGRES_SETUP: >
-        keycloak/default.sql
         overworld/default.sql
         finitequiz/default.sql
+        keycloak/default.sql
 
   keycloak-db:
     container_name: keycloak-db
@@ -75,11 +75,13 @@ services:
       - "80"
     depends_on:
       - overworld-db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_URL=postgresql://overworld-db:5432/postgres
-      - FINITEQUIZ_URL=http://finitequiz-backend/api/v1
+      - FINITEQUIZ_URL=http://host.docker.internal:8080/api/v1
       - KEYCLOAK_ISSUER=http://localhost/keycloak/realms/Gamify-IT
       - KEYCLOAK_URL=http://keycloak/keycloak/realms/Gamify-IT
 
