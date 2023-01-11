@@ -64,7 +64,11 @@ public class GameResultService {
      * @param accessToken accessToken of the user
      * @throws IllegalArgumentException if at least one of the arguments is null
      */
-    public void saveGameResult(final @Valid GameResultDTO gameResultDTO, final String userId, final String accessToken) {
+    public void saveGameResult(
+        final @Valid GameResultDTO gameResultDTO,
+        final String userId,
+        final String accessToken
+    ) {
         if (gameResultDTO == null || userId == null || accessToken == null) {
             throw new IllegalArgumentException("gameResultDTO or userId is null");
         }
@@ -73,7 +77,6 @@ public class GameResultService {
             gameResultDTO.getQuestionCount()
         );
         final OverworldResultDTO resultDTO = new OverworldResultDTO(
-            "FINITEQUIZ",
             gameResultDTO.getConfigurationAsUUID(),
             resultScore,
             userId
@@ -86,6 +89,7 @@ public class GameResultService {
             final GameResult result = new @Valid GameResult(
                 gameResultDTO.getQuestionCount(),
                 gameResultDTO.getScore(),
+                gameResultDTO.getTimeSpent(),
                 correctQuestions,
                 wrongQuestions,
                 gameResultDTO.getConfigurationAsUUID(),
@@ -112,7 +116,7 @@ public class GameResultService {
      * @return score as int in %
      * @throws IllegalArgumentException if correctAnswers < 0 || numberOfQuestions < correctAnswers
      */
-    private int calculateResultScore(final int correctAnswers, final int numberOfQuestions) {
+    public int calculateResultScore(final int correctAnswers, final int numberOfQuestions) {
         if (correctAnswers < 0 || numberOfQuestions < correctAnswers) {
             throw new IllegalArgumentException(
                 String.format(

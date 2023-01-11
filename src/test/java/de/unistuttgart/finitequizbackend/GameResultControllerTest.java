@@ -76,6 +76,7 @@ class GameResultControllerTest {
     @BeforeEach
     public void createBasicData() throws IOException {
         ResultMocks.setupMockBooksResponse(mockResultsService);
+        gameResultRepository.deleteAll();
         configurationRepository.deleteAll();
         initialQuestion1 = new Question();
         initialQuestion1.setText("Are you cool?");
@@ -123,7 +124,7 @@ class GameResultControllerTest {
         wrongList.add(
             new RoundResultDTO(initialQuestion2.getId(), initialQuestion2.getWrongAnswers().stream().findFirst().get())
         );
-        final GameResultDTO gameResultDTO = new GameResultDTO(2, 1, correctList, wrongList, UUID.randomUUID());
+        final GameResultDTO gameResultDTO = new GameResultDTO(2, 1, 30, correctList, wrongList, UUID.randomUUID());
 
         final String bodyValue = objectMapper.writeValueAsString(gameResultDTO);
         final MvcResult result = mvc
