@@ -49,36 +49,65 @@ public class StatisticService {
 
         for (final GameResult gameResult : gameResults) {
             // iterate over all wrong answered round results and add wrong answered counter for this problematic question
-            gameResult
-                .getWrongAnsweredQuestions()
-                .forEach(roundResult -> {
-                    problematicQuestions
-                        .stream()
-                        .filter(problematicQuestion ->
-                            problematicQuestion.getQuestion().getId().equals(roundResult.getQuestion().getId())
-                        )
-                        .findAny()
-                        .ifPresent(problematicQuestion -> {
-                            problematicQuestion.addWrongAnswer();
-                        });
-                });
+            countWrongAnsweredQuestions(problematicQuestions, gameResult);
 
             // iterate over all correct answered round results and add correct answered counter for this problematic question
-            gameResult
-                .getCorrectAnsweredQuestions()
-                .forEach(roundResult -> {
-                    problematicQuestions
-                        .stream()
-                        .filter(problematicQuestion ->
-                            problematicQuestion.getQuestion().getId().equals(roundResult.getQuestion().getId())
-                        )
-                        .findAny()
-                        .ifPresent(problematicQuestion -> {
-                            problematicQuestion.addCorrectAnswer();
-                        });
-                });
+            countRightAnsweredQuestions(problematicQuestions, gameResult);
         }
+        sortProblematicQuestionsByPercentageWrongAnswers(problematicQuestions);
+        return problematicQuestions.subList(0, Math.min(MAX_PROBLEMATIC_QUESTIONS, problematicQuestions.size()));
+    }
 
+    /**
+     * Counts amount of right answered questions and adds them to the problematic question list
+     *
+     * @param problematicQuestions the list of problematic questions where the right answered counter should be increased
+     * @param gameResult the game result which contains the answered questions
+     */
+    private void countRightAnsweredQuestions(List<ProblematicQuestion> problematicQuestions, GameResult gameResult) {
+        gameResult
+            .getCorrectAnsweredQuestions()
+            .forEach(roundResult -> {
+                problematicQuestions
+                    .stream()
+                    .filter(problematicQuestion ->
+                        problematicQuestion.getQuestion().getId().equals(roundResult.getQuestion().getId())
+                    )
+                    .findAny()
+                    .ifPresent(problematicQuestion -> {
+                        problematicQuestion.addCorrectAnswer();
+                    });
+            });
+    }
+
+    /**
+     * Counts amount of wrong answered questions and adds them to the problematic question list
+     *
+     * @param problematicQuestions the list of problematic questions where the wrong answered counter should be increased
+     * @param gameResult the game result which contains the answered questions
+     */
+    private void countWrongAnsweredQuestions(List<ProblematicQuestion> problematicQuestions, GameResult gameResult) {
+        gameResult
+            .getWrongAnsweredQuestions()
+            .forEach(roundResult -> {
+                problematicQuestions
+                    .stream()
+                    .filter(problematicQuestion ->
+                        problematicQuestion.getQuestion().getId().equals(roundResult.getQuestion().getId())
+                    )
+                    .findAny()
+                    .ifPresent(problematicQuestion -> {
+                        problematicQuestion.addWrongAnswer();
+                    });
+            });
+    }
+
+    /**
+     * Sorts the list of problematic questions by the amount of wrong answers to attempts
+     *
+     * @param problematicQuestions the list of problematic questions to sort
+     */
+    private void sortProblematicQuestionsByPercentageWrongAnswers(List<ProblematicQuestion> problematicQuestions) {
         problematicQuestions.sort((o1, o2) -> {
             double percantageWrong1 = (double) o1.getWrongAnswers() / (double) o1.getAttempts();
             double percantageWrong2 = (double) o2.getWrongAnswers() / (double) o2.getAttempts();
@@ -90,8 +119,6 @@ public class StatisticService {
                 return 0;
             }
         });
-
-        return problematicQuestions.subList(0, Math.min(MAX_PROBLEMATIC_QUESTIONS, problematicQuestions.size()));
     }
 
     /**
@@ -119,19 +146,10 @@ public class StatisticService {
             timeSpentDistributions.add(timeSpentDistribution);
         }
         // order game results by time spent
-        gameResults.sort((o1, o2) -> {
-            if (o1.getTimeSpent() > o2.getTimeSpent()) {
-                return 1;
-            } else if (o1.getTimeSpent() < o2.getTimeSpent()) {
-                return -1;
-            } else {
-                return 0;
-            }
-        });
+        sortGameResultsByPlayedTime(gameResults);
 
         // calculate time spent time borders to time spent distribution percentage
         int currentGameResultIndex = 0;
-        // TODO: make this work that every timedistrubution has the correct amount of counts
         for (TimeSpentDistribution timeSpentDistribution : timeSpentDistributions) {
             GameResult gameResult = null;
             while (currentGameResultIndex < (timeSpentDistribution.getToPercentage() / 100.0) * gameResults.size()) {
@@ -147,5 +165,22 @@ public class StatisticService {
             }
         }
         return timeSpentDistributions;
+    }
+
+    /**
+     * Sorts a list of game results by played time
+     *
+     * @param gameResults the list of game results to sort
+     */
+    private void sortGameResultsByPlayedTime(List<GameResult> gameResults) {
+        gameResults.sort((o1, o2) -> {
+            if (o1.getTimeSpent() > o2.getTimeSpent()) {
+                return 1;
+            } else if (o1.getTimeSpent() < o2.getTimeSpent()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
     }
 }
