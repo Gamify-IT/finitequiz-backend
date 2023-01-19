@@ -69,15 +69,22 @@ public class GameResultDTO {
     @NotNull(message = "configurationAsUUID cannot be null")
     private UUID configurationAsUUID;
 
+    /**
+     * The time spent in seconds on the game for this run.
+     */
+    private long timeSpent;
+
     public GameResultDTO(
         final int questionCount,
         final long score,
+        final long timeSpent,
         final List<RoundResultDTO> correctAnsweredQuestions,
         final List<RoundResultDTO> wrongAnsweredQuestions,
         final UUID configurationAsUUID
     ) {
         this.questionCount = questionCount;
         this.score = score;
+        this.timeSpent = timeSpent;
         this.correctAnsweredQuestions = correctAnsweredQuestions;
         this.wrongAnsweredQuestions = wrongAnsweredQuestions;
         this.configurationAsUUID = configurationAsUUID;

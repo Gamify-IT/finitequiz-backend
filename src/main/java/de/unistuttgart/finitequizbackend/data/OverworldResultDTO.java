@@ -24,7 +24,7 @@ public class OverworldResultDTO {
      * The name of the minigame. In this case "FINITEQUIZ".
      */
     @NotNull(message = "game cannot be null")
-    String game;
+    final String game = "FINITEQUIZ";
 
     /**
      * The ID of the configuration that was used for the game.

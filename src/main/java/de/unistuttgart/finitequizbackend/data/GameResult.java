@@ -2,6 +2,7 @@ package de.unistuttgart.finitequizbackend.data;
 
 import de.unistuttgart.finitequizbackend.Constants;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.validation.annotation.Validated;
 
 /**
@@ -76,11 +78,18 @@ public class GameResult {
     private String playerId;
 
     @NotNull(message = "playedTime cannot be null")
-    private LocalDateTime playedTime;
+    @CreationTimestamp
+    private Date playedTime = new Date();
+
+    /**
+     * The time spent in seconds on the game for this run.
+     */
+    private long timeSpent;
 
     public GameResult(
         final int questionCount,
         final long score,
+        final long timeSpent,
         final List<RoundResult> correctAnsweredQuestions,
         final List<RoundResult> wrongAnsweredQuestions,
         final UUID configurationAsUUID,
@@ -88,10 +97,10 @@ public class GameResult {
     ) {
         this.questionCount = questionCount;
         this.score = score;
+        this.timeSpent = timeSpent;
         this.correctAnsweredQuestions = correctAnsweredQuestions;
         this.wrongAnsweredQuestions = wrongAnsweredQuestions;
         this.configurationAsUUID = configurationAsUUID;
         this.playerId = playerId;
-        this.playedTime = LocalDateTime.now();
     }
 }
