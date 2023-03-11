@@ -288,6 +288,9 @@ class ConfigControllerTest {
         assertNotEquals(initialConfig.getId(), clonedId);
 
         final Configuration cloneConfig = configurationRepository.findById(clonedId).get();
+        cloneConfig.getQuestions().forEach(question -> initialConfig.getQuestions().forEach(initialQuestion -> {
+            assertNotEquals(question.getId(), initialQuestion.getId());
+        }));
         assertNotEquals(cloneConfig, initialConfig);
     }
 }
