@@ -8,7 +8,6 @@ import de.unistuttgart.finitequizbackend.data.mapper.ConfigurationMapper;
 import de.unistuttgart.finitequizbackend.data.mapper.QuestionMapper;
 import de.unistuttgart.finitequizbackend.repositories.ConfigurationRepository;
 import de.unistuttgart.finitequizbackend.repositories.QuestionRepository;
-
 import java.util.*;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -198,8 +197,15 @@ public class ConfigService {
      * @return the new id of the cloned configuration
      */
     public UUID cloneConfiguration(final UUID id) {
-        Configuration config = configurationRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Configuration with id %s not found", id)));
-        Configuration cloneConfig = (Configuration) config.clone();
+        Configuration config = configurationRepository
+            .findById(id)
+            .orElseThrow(() ->
+                new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    String.format("Configuration with id %s not found", id)
+                )
+            );
+        Configuration cloneConfig = config.clone();
         cloneConfig = configurationRepository.save(cloneConfig);
         return cloneConfig.getId();
     }
