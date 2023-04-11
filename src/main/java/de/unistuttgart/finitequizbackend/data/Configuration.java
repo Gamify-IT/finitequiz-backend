@@ -2,6 +2,7 @@ package de.unistuttgart.finitequizbackend.data;
 
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.persistence.*;
 import javax.validation.Valid;
 import lombok.AccessLevel;
@@ -52,5 +53,12 @@ public class Configuration {
      */
     public void removeQuestion(final Question question) {
         this.questions.remove(question);
+    }
+
+    @Override
+    public Configuration clone() {
+        return new Configuration(
+            this.questions.stream().map(Question::clone).collect(Collectors.toSet())
+        );
     }
 }
