@@ -30,7 +30,7 @@ import org.springframework.test.web.servlet.MvcResult;
 @AutoConfigureMockMvc
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class StatisticTest {
+class StatisticTest {
 
     private final String API_URL = "/statistics";
 
@@ -183,7 +183,7 @@ public class StatisticTest {
     }
 
     @Test
-    public void testGetProblematicQuestions() throws Exception {
+    void testGetProblematicQuestions() throws Exception {
         final MvcResult result = mvc
             .perform(
                 get(API_URL + "/" + staticConfiguration.getId() + "/problematic-questions")
@@ -214,7 +214,7 @@ public class StatisticTest {
     }
 
     @Test
-    public void testGetTimeSpentDistribution() throws Exception {
+    void testGetTimeSpentDistribution() throws Exception {
         final MvcResult result = mvc
             .perform(
                 get(API_URL + "/" + staticConfiguration.getId() + "/time-spent")

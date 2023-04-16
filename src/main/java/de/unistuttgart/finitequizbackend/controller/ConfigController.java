@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class ConfigController {
 
+    public static final List<String> LECTURER = List.of("lecturer");
     @Autowired
     ConfigurationRepository configurationRepository;
 
@@ -67,7 +68,7 @@ public class ConfigController {
         @Valid @RequestBody final ConfigurationDTO configurationDTO
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
-        jwtValidatorService.hasRolesOrThrow(accessToken, List.of("lecturer"));
+        jwtValidatorService.hasRolesOrThrow(accessToken, LECTURER);
         log.debug("create configuration {}", configurationDTO);
         return configService.saveConfiguration(configurationDTO);
     }
@@ -79,7 +80,7 @@ public class ConfigController {
         @Valid @RequestBody final ConfigurationDTO configurationDTO
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
-        jwtValidatorService.hasRolesOrThrow(accessToken, List.of("lecturer"));
+        jwtValidatorService.hasRolesOrThrow(accessToken, LECTURER);
         log.debug("update configuration {} with {}", id, configurationDTO);
         return configService.updateConfiguration(id, configurationDTO);
     }
@@ -90,7 +91,7 @@ public class ConfigController {
         @PathVariable final UUID id
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
-        jwtValidatorService.hasRolesOrThrow(accessToken, List.of("lecturer"));
+        jwtValidatorService.hasRolesOrThrow(accessToken, LECTURER);
         log.debug("delete configuration {}", id);
         return configService.deleteConfiguration(id);
     }
@@ -103,7 +104,7 @@ public class ConfigController {
         @Valid @RequestBody final QuestionDTO questionDTO
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
-        jwtValidatorService.hasRolesOrThrow(accessToken, List.of("lecturer"));
+        jwtValidatorService.hasRolesOrThrow(accessToken, LECTURER);
         log.debug("add question {} to configuration {}", questionDTO, id);
         return configService.addQuestionToConfiguration(id, questionDTO);
     }
@@ -115,7 +116,7 @@ public class ConfigController {
         @PathVariable final UUID questionId
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
-        jwtValidatorService.hasRolesOrThrow(accessToken, List.of("lecturer"));
+        jwtValidatorService.hasRolesOrThrow(accessToken, LECTURER);
         log.debug("remove question {} from configuration {}", questionId, id);
         return configService.removeQuestionFromConfiguration(id, questionId);
     }
@@ -128,7 +129,7 @@ public class ConfigController {
         @Valid @RequestBody final QuestionDTO questionDTO
     ) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
-        jwtValidatorService.hasRolesOrThrow(accessToken, List.of("lecturer"));
+        jwtValidatorService.hasRolesOrThrow(accessToken, LECTURER);
         log.debug("update question {} with {} for configuration {}", questionId, questionDTO, id);
         return configService.updateQuestionFromConfiguration(id, questionId, questionDTO);
     }
@@ -147,7 +148,7 @@ public class ConfigController {
     @ResponseStatus(HttpStatus.CREATED)
     public UUID cloneConfiguration(@CookieValue("access_token") final String accessToken, @PathVariable final UUID id) {
         jwtValidatorService.validateTokenOrThrow(accessToken);
-        jwtValidatorService.hasRolesOrThrow(accessToken, List.of("lecturer"));
+        jwtValidatorService.hasRolesOrThrow(accessToken, LECTURER);
         return configService.cloneConfiguration(id);
     }
 }
