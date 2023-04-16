@@ -7,7 +7,6 @@ import de.unistuttgart.finitequizbackend.data.mapper.QuestionMapper;
 import de.unistuttgart.finitequizbackend.data.statistic.ProblematicQuestion;
 import de.unistuttgart.finitequizbackend.data.statistic.TimeSpentDistribution;
 import de.unistuttgart.finitequizbackend.repositories.GameResultRepository;
-import de.unistuttgart.finitequizbackend.repositories.QuestionRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -67,17 +66,13 @@ public class StatisticService {
     private void countRightAnsweredQuestions(List<ProblematicQuestion> problematicQuestions, GameResult gameResult) {
         gameResult
             .getCorrectAnsweredQuestions()
-            .forEach(roundResult -> {
-                problematicQuestions
-                    .stream()
-                    .filter(problematicQuestion ->
-                        problematicQuestion.getQuestion().getId().equals(roundResult.getQuestion().getId())
-                    )
-                    .findAny()
-                    .ifPresent(problematicQuestion -> {
-                        problematicQuestion.addCorrectAnswer();
-                    });
-            });
+            .forEach(roundResult -> problematicQuestions
+                .stream()
+                .filter(problematicQuestion ->
+                    problematicQuestion.getQuestion().getId().equals(roundResult.getQuestion().getId())
+                )
+                .findAny()
+                .ifPresent(ProblematicQuestion::addCorrectAnswer));
     }
 
     /**
@@ -89,17 +84,13 @@ public class StatisticService {
     private void countWrongAnsweredQuestions(List<ProblematicQuestion> problematicQuestions, GameResult gameResult) {
         gameResult
             .getWrongAnsweredQuestions()
-            .forEach(roundResult -> {
-                problematicQuestions
-                    .stream()
-                    .filter(problematicQuestion ->
-                        problematicQuestion.getQuestion().getId().equals(roundResult.getQuestion().getId())
-                    )
-                    .findAny()
-                    .ifPresent(problematicQuestion -> {
-                        problematicQuestion.addWrongAnswer();
-                    });
-            });
+            .forEach(roundResult -> problematicQuestions
+                .stream()
+                .filter(problematicQuestion ->
+                    problematicQuestion.getQuestion().getId().equals(roundResult.getQuestion().getId())
+                )
+                .findAny()
+                .ifPresent(ProblematicQuestion::addWrongAnswer));
     }
 
     /**
