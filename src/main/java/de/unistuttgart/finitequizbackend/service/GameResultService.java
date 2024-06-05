@@ -33,6 +33,8 @@ public class GameResultService {
     @Autowired
     QuestionRepository questionRepository;
 
+    private static int hundredScoreCount = 0;
+
     /**
      * Cast list of question texts to a List of Questions
      *
@@ -76,10 +78,14 @@ public class GameResultService {
             gameResultDTO.getCorrectAnsweredQuestions().size(),
             gameResultDTO.getQuestionCount()
         );
+
+        final int rewards = calculateRewards(resultScore);
+
         final OverworldResultDTO resultDTO = new OverworldResultDTO(
             gameResultDTO.getConfigurationAsUUID(),
             resultScore,
-            userId
+            userId,
+                rewards
         );
         try {
             resultClient.submit(accessToken, resultDTO);
@@ -127,5 +133,27 @@ public class GameResultService {
             );
         }
         return (int) ((100.0 * correctAnswers) / numberOfQuestions);
+    }
+
+    //////// Hier Überlegung: verfeinern der Rewards, das heißt sowas ähnliches hinzufügen wie:
+    //////// bei besserer Zeit rewards von 1 coin, bei geringer Different von kills und shots: 3 coins ...
+
+    /**
+     * This method calculates the rewards for one finitequiz round based on the gained scores in the
+     * current round
+     * @param resultScore
+     * @return gained rewards
+     */
+    private int calculateRewards(final int resultScore) {
+        if (resultScore < 0) {
+            throw new IllegalArgumentException("Result score cannot be less than zero");
+        }
+        if (resultScore == 100 && hundredScoreCount < 3) {
+            hundredScoreCount++;
+            return 10;
+        } else if (resultScore == 100 && hundredScoreCount >= 3) {
+            return 5;
+        }
+        return resultScore/10;
     }
 }
