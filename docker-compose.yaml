@@ -85,7 +85,7 @@ services:
 
   finitequiz-backend:
     container_name: finitequiz-backend
-    image: ghcr.io/gamify-it/finitequiz-backend:main
+    build: .
     restart: always
     expose:
       - "80"
