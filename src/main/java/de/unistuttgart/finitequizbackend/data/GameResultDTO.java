@@ -73,11 +73,13 @@ public class GameResultDTO {
      * The time spent in seconds on the game for this run.
      */
     private long timeSpent;
+    private int rewards;
 
     public GameResultDTO(
         final int questionCount,
         final long score,
         final long timeSpent,
+        final int rewards,
         final List<RoundResultDTO> correctAnsweredQuestions,
         final List<RoundResultDTO> wrongAnsweredQuestions,
         final UUID configurationAsUUID
@@ -85,6 +87,7 @@ public class GameResultDTO {
         this.questionCount = questionCount;
         this.score = score;
         this.timeSpent = timeSpent;
+        this.rewards = rewards;
         this.correctAnsweredQuestions = correctAnsweredQuestions;
         this.wrongAnsweredQuestions = wrongAnsweredQuestions;
         this.configurationAsUUID = configurationAsUUID;

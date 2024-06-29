@@ -80,6 +80,7 @@ public class GameResultService {
         );
 
         final int rewards = calculateRewards(resultScore);
+        gameResultDTO.setRewards(rewards);
 
         final OverworldResultDTO resultDTO = new OverworldResultDTO(
             gameResultDTO.getConfigurationAsUUID(),
@@ -96,10 +97,12 @@ public class GameResultService {
                 gameResultDTO.getQuestionCount(),
                 gameResultDTO.getScore(),
                 gameResultDTO.getTimeSpent(),
+                    rewards,
                 correctQuestions,
                 wrongQuestions,
                 gameResultDTO.getConfigurationAsUUID(),
                 userId
+
             );
             gameResultRepository.save(result);
         } catch (final FeignException.BadGateway badGateway) {
