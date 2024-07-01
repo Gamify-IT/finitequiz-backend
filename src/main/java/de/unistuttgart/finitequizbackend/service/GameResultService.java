@@ -80,6 +80,7 @@ public class GameResultService {
         );
 
         final int rewards = calculateRewards(resultScore);
+        gameResultDTO.setRewards(rewards);
 
         gameResultDTO.setRewards(rewards);
 
@@ -94,17 +95,17 @@ public class GameResultService {
             final List<RoundResult> correctQuestions =
                 this.castQuestionList(gameResultDTO.getCorrectAnsweredQuestions());
             final List<RoundResult> wrongQuestions = this.castQuestionList(gameResultDTO.getWrongAnsweredQuestions());
-            final GameResult result = new @Valid GameResult(
-                gameResultDTO.getQuestionCount(),
-                gameResultDTO.getScore(),
-                gameResultDTO.getTimeSpent(),
+            final GameResult result = new GameResult(
+                    gameResultDTO.getQuestionCount(),
+                    gameResultDTO.getScore(),
+                    gameResultDTO.getTimeSpent(),
                     rewards,
                     correctQuestions,
-                wrongQuestions,
-                gameResultDTO.getConfigurationAsUUID(),
-                userId
-
+                    wrongQuestions,
+                    gameResultDTO.getConfigurationAsUUID(),
+                    userId
             );
+
             gameResultRepository.save(result);
         } catch (final FeignException.BadGateway badGateway) {
             final String warning =

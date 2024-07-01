@@ -126,6 +126,7 @@ class GameResultControllerTest {
         );
         final GameResultDTO gameResultDTO = new GameResultDTO(2, 1, 30,1, correctList, wrongList, UUID.randomUUID());
 
+
         final String bodyValue = objectMapper.writeValueAsString(gameResultDTO);
         final MvcResult result = mvc
             .perform(post(API_URL).cookie(cookie).content(bodyValue).contentType(MediaType.APPLICATION_JSON))

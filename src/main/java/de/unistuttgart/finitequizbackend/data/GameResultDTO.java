@@ -73,6 +73,7 @@ public class GameResultDTO {
      * The time spent in seconds on the game for this run.
      */
     private long timeSpent;
+    private int rewards;
 
     private int rewards;
 
