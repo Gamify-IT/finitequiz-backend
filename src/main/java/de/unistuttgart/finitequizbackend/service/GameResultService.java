@@ -33,6 +33,9 @@ public class GameResultService {
     @Autowired
     QuestionRepository questionRepository;
 
+    private static int hundredScoreCount = 0;
+
+
     /**
      * Cast list of question texts to a List of Questions
      *
@@ -76,10 +79,15 @@ public class GameResultService {
             gameResultDTO.getCorrectAnsweredQuestions().size(),
             gameResultDTO.getQuestionCount()
         );
+
+        final int rewards = calculateRewards(resultScore);
+        gameResultDTO.setRewards(rewards);
+
         final OverworldResultDTO resultDTO = new OverworldResultDTO(
             gameResultDTO.getConfigurationAsUUID(),
             resultScore,
-            userId
+            userId,
+                rewards
         );
         try {
             resultClient.submit(accessToken, resultDTO);
@@ -90,6 +98,7 @@ public class GameResultService {
                 gameResultDTO.getQuestionCount(),
                 gameResultDTO.getScore(),
                 gameResultDTO.getTimeSpent(),
+                rewards,
                 correctQuestions,
                 wrongQuestions,
                 gameResultDTO.getConfigurationAsUUID(),
@@ -127,5 +136,18 @@ public class GameResultService {
             );
         }
         return (int) ((100.0 * correctAnswers) / numberOfQuestions);
+    }
+
+    private int calculateRewards(final int resultScore) {
+        if (resultScore < 0) {
+            throw new IllegalArgumentException("Result score cannot be less than zero");
+        }
+        if (resultScore == 100 && hundredScoreCount < 3) {
+            hundredScoreCount++;
+            return 10;
+        } else if (resultScore == 100 && hundredScoreCount >= 3) {
+            return 5;
+        }
+        return resultScore/10;
     }
 }
