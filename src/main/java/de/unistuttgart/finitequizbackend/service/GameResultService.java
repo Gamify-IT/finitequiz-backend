@@ -81,6 +81,7 @@ public class GameResultService {
         );
 
         final int rewards = calculateRewards(resultScore);
+        gameResultDTO.setScore(resultScore);
         gameResultDTO.setRewards(rewards);
 
         final OverworldResultDTO resultDTO = new OverworldResultDTO(
