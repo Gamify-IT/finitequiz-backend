@@ -45,4 +45,6 @@ public class OverworldResultDTO {
     @NotNull(message = "user cannot be null")
     @NotBlank(message = "user cannot be blank")
     String userId;
+
+    int rewards;
 }

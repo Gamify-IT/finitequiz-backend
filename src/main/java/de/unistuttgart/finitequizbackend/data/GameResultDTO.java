@@ -73,18 +73,22 @@ public class GameResultDTO {
      * The time spent in seconds on the game for this run.
      */
     private long timeSpent;
+    private int rewards;
 
     public GameResultDTO(
         final int questionCount,
         final long score,
         final long timeSpent,
-        final List<RoundResultDTO> correctAnsweredQuestions,
+        final int rewards,
+
+    final List<RoundResultDTO> correctAnsweredQuestions,
         final List<RoundResultDTO> wrongAnsweredQuestions,
         final UUID configurationAsUUID
     ) {
         this.questionCount = questionCount;
         this.score = score;
         this.timeSpent = timeSpent;
+        this.rewards = rewards;
         this.correctAnsweredQuestions = correctAnsweredQuestions;
         this.wrongAnsweredQuestions = wrongAnsweredQuestions;
         this.configurationAsUUID = configurationAsUUID;
@@ -97,6 +101,7 @@ public class GameResultDTO {
         if (id != other.id) return false;
         if (questionCount != other.questionCount) return false;
         if (score != other.score) return false;
+        if(rewards != other.rewards) return false;
         if (!correctAnsweredQuestions.equals(other.correctAnsweredQuestions)) return false;
         if (!wrongAnsweredQuestions.equals(other.wrongAnsweredQuestions)) return false;
         return configurationAsUUID.equals(other.configurationAsUUID);

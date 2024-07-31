@@ -86,10 +86,14 @@ public class GameResult {
      */
     private long timeSpent;
 
+    private int rewards;
+
+
     public GameResult(
         final int questionCount,
         final long score,
         final long timeSpent,
+        final int rewards,
         final List<RoundResult> correctAnsweredQuestions,
         final List<RoundResult> wrongAnsweredQuestions,
         final UUID configurationAsUUID,
@@ -98,6 +102,7 @@ public class GameResult {
         this.questionCount = questionCount;
         this.score = score;
         this.timeSpent = timeSpent;
+        this.rewards = rewards;
         this.correctAnsweredQuestions = correctAnsweredQuestions;
         this.wrongAnsweredQuestions = wrongAnsweredQuestions;
         this.configurationAsUUID = configurationAsUUID;
