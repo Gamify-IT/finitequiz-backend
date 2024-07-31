@@ -124,7 +124,7 @@ class GameResultControllerTest {
         wrongList.add(
             new RoundResultDTO(initialQuestion2.getId(), initialQuestion2.getWrongAnswers().stream().findFirst().get())
         );
-        final GameResultDTO gameResultDTO = new GameResultDTO(2, 1, 30, 1, correctList, wrongList, UUID.randomUUID());
+        final GameResultDTO gameResultDTO = new GameResultDTO(2, 50, 30, 5, correctList, wrongList, UUID.randomUUID());
 
         final String bodyValue = objectMapper.writeValueAsString(gameResultDTO);
         final MvcResult result = mvc
