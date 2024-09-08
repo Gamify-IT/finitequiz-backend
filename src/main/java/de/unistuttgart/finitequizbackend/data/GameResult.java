@@ -86,6 +86,9 @@ public class GameResult {
      */
     private long timeSpent;
 
+    /**
+     * The rewards achieved in the game.
+     */
     private int rewards;
 
 

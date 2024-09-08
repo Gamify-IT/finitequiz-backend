@@ -139,6 +139,18 @@ public class GameResultService {
         return (int) ((100.0 * correctAnswers) / numberOfQuestions);
     }
 
+
+    /**
+     * This method calculates the rewards for one finitequiz round based on the gained scores in the
+     * current round
+     *
+     * first three rounds: 10 rewards, after that for each 100% : 5 rewards
+     * if score != 100% then the score is divided by 10
+     *
+     * @param resultScore the score gained in the game
+     * @return rewards as int
+     * @throws IllegalArgumentException if resultScore < 0
+     */
     private int calculateRewards(final int resultScore) {
         if (resultScore < 0) {
             throw new IllegalArgumentException("Result score cannot be less than zero");
@@ -146,7 +158,7 @@ public class GameResultService {
         if (resultScore == 100 && hundredScoreCount < 3) {
             hundredScoreCount++;
             return 10;
-        } else if (resultScore == 100 && hundredScoreCount >= 3) {
+        } else if (resultScore == 100) {
             return 5;
         }
         return resultScore/10;
