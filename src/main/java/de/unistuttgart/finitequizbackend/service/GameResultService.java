@@ -140,15 +140,16 @@ public class GameResultService {
     }
 
     /**
-     * This method calculates the rewards for one finitequiz round based on the gained scores in the
-     * current round
+     * Calculates the rewards for a finite quiz round based on the score achieved in the current round.
      *
-     * first three rounds: 10 coins, after that for each 100% only 5 coins
-     * if score != 100% then the score is divided by 10
+     * Reward logic:
+     * - First three rounds with a score of 100%: 10 coins per round.
+     * - After the third round, if the score is 100%: 5 coins per round.
+     * - If the score is less than 100%, the reward is calculated as: score / 10.
      *
-     * @param resultScore the score gained in the game
-     * @return rewards as int
-     * @throws IllegalArgumentException if resultScore < 0
+     * @param resultScore the score achieved in the game (must be >= 0)
+     * @return the number of rewards as an integer
+     * @throws IllegalArgumentException if resultScore is less than 0
      */
     private int calculateRewards(final int resultScore) {
         if (resultScore < 0) {
