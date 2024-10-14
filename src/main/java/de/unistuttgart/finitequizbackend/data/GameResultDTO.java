@@ -73,6 +73,12 @@ public class GameResultDTO {
      * The time spent in seconds on the game for this run.
      */
     private long timeSpent;
+
+    /**
+     * The reward-coins that the player achieved in the current round.
+     */
+    @Min(value = Constants.MIN_REWARDS, message = "Rewards cannot be less than " + Constants.MIN_REWARDS)
+    @Max(value = Constants.MAX_REWARDS, message = "Rewards cannot be higher than " + Constants.MAX_REWARDS)
     private int rewards;
 
     public GameResultDTO(
