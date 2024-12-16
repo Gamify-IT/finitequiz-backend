@@ -1,6 +1,7 @@
 package de.unistuttgart.finitequizbackend.controller;
 
 import de.unistuttgart.finitequizbackend.data.ConfigurationDTO;
+import de.unistuttgart.finitequizbackend.data.ImageDTO;
 import de.unistuttgart.finitequizbackend.data.QuestionDTO;
 import de.unistuttgart.finitequizbackend.data.mapper.ConfigurationMapper;
 import de.unistuttgart.finitequizbackend.data.mapper.QuestionMapper;
@@ -17,6 +18,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 
 /**
  * This controller handles all game-configuration-related REST-APIs
@@ -162,5 +166,12 @@ public class ConfigController {
         jwtValidatorService.validateTokenOrThrow(accessToken);
         jwtValidatorService.hasRolesOrThrow(accessToken, LECTURER);
         return configService.cloneConfiguration(id);
+    }
+
+    @PostMapping("/images")
+    public ImageDTO addImage(@CookieValue("access_token") final String accessToken, @Valid @RequestBody ImageDTO imageDTO) {
+        jwtValidatorService.validateTokenOrThrow(accessToken);
+        log.debug("get all configurations");
+        return configService.addImage(imageDTO);
     }
 }
