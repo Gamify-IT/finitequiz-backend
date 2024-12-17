@@ -1,12 +1,12 @@
 package de.unistuttgart.finitequizbackend.data;
 
 
-import de.unistuttgart.finitequizbackend.data.Entity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import javax.persistence.Entity;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,5 +23,5 @@ public class Image {
     @GeneratedValue(generator = "uuid")
     UUID id;
     private UUID imageUUID;
-    private File image;
+    private byte[] image;
 }

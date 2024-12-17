@@ -8,6 +8,8 @@ import de.unistuttgart.finitequizbackend.data.mapper.QuestionMapper;
 import de.unistuttgart.finitequizbackend.repositories.ConfigurationRepository;
 import de.unistuttgart.finitequizbackend.service.ConfigService;
 import de.unistuttgart.gamifyit.authentificationvalidator.JWTValidatorService;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -169,9 +171,25 @@ public class ConfigController {
     }
 
     @PostMapping("/images")
-    public ImageDTO addImage(@CookieValue("access_token") final String accessToken, @Valid @RequestBody ImageDTO imageDTO) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public ImageDTO addImage(
+            @CookieValue("access_token") final String accessToken,
+            @RequestParam("uuid") UUID uuid,
+            @RequestParam("image") MultipartFile image
+    ) throws IOException {
         jwtValidatorService.validateTokenOrThrow(accessToken);
-        log.debug("get all configurations");
+
+        byte[] imageBytes = image.getBytes();
+        if (imageBytes.length == 0) {
+            throw new IllegalArgumentException("Die hochgeladene Datei ist leer.");
+        }
+
+        log.info("Bild mit UUID {} empfangen, Größe: {} Bytes", uuid, imageBytes.length);
+
+        ImageDTO imageDTO = new ImageDTO();
+        imageDTO.setImageUUID(uuid);
+        imageDTO.setImage(imageBytes);
+
         return configService.addImage(imageDTO);
     }
 }

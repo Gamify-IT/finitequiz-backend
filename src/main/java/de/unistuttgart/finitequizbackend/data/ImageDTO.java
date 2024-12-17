@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ import java.util.UUID;
 public class ImageDTO {
 
     @NotNull(message = "imageUUID cannot be null")
-    private UUID configurationAsUUID;
+    private UUID imageUUID;
 
-    private List<MultipartFile> images;
+    private byte[] image;
 }

@@ -288,8 +288,4 @@ public class ConfigService {
         return imageDTO;
     }
 
-    public ImageDTO getImage(final UUID uuid) {
-        return imageMapper.imageToImageDTO(imageRepository.findByImageUUID(uuid));
-    }
-
 }
