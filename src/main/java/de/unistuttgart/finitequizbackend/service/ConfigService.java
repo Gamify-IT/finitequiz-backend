@@ -9,6 +9,7 @@ import de.unistuttgart.finitequizbackend.repositories.ImageRepository;
 import de.unistuttgart.finitequizbackend.repositories.QuestionRepository;
 import de.unistuttgart.finitequizbackend.clients.OverworldClient;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import de.unistuttgart.gamifyit.authentificationvalidator.JWTValidatorService;
@@ -288,4 +289,12 @@ public class ConfigService {
         return imageDTO;
     }
 
+    public List<ImageDTO> getImagesByConfigUUID(UUID uuid) {
+
+        List<Image> images = imageRepository.findByImageUUID(List.of(uuid));
+
+        return images.stream()
+                .map(image -> imageMapper.imageToImageDTO(image))
+                .collect(Collectors.toList());
+    }
 }

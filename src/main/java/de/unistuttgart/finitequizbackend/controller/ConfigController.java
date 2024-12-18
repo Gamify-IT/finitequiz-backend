@@ -184,12 +184,16 @@ public class ConfigController {
             throw new IllegalArgumentException("Die hochgeladene Datei ist leer.");
         }
 
-        log.info("Bild mit UUID {} empfangen, Größe: {} Bytes", uuid, imageBytes.length);
-
         ImageDTO imageDTO = new ImageDTO();
         imageDTO.setImageUUID(uuid);
         imageDTO.setImage(imageBytes);
 
         return configService.addImage(imageDTO);
+    }
+
+    @GetMapping("/{uuid}")
+    public List<ImageDTO> getImagesByConfigId(@PathVariable("uuid") UUID uuid) {
+
+        return configService.getImagesByConfigUUID(uuid);
     }
 }
