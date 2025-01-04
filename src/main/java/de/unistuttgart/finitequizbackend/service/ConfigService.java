@@ -286,15 +286,17 @@ public class ConfigService {
 
     public ImageDTO addImage(final ImageDTO imageDTO) {
         imageRepository.save(imageMapper.imageDTOToImage(imageDTO));
+        System.out.println("Aktuelle Inhalte im Repository: " + imageRepository.findAll());
         return imageDTO;
     }
 
     public List<ImageDTO> getImagesByConfigUUID(UUID uuid) {
 
-        List<Image> images = imageRepository.findByImageUUID(List.of(uuid));
+        List<Image> images = imageRepository.findByImageUUIDIn(List.of(uuid.toString()));
 
         return images.stream()
                 .map(image -> imageMapper.imageToImageDTO(image))
                 .collect(Collectors.toList());
     }
+
 }

@@ -188,12 +188,13 @@ public class ConfigController {
         imageDTO.setImageUUID(uuid);
         imageDTO.setImage(imageBytes);
 
+        log.debug(String.valueOf(imageDTO.getImageUUID()));
+
         return configService.addImage(imageDTO);
     }
 
-    @GetMapping("/{uuid}")
+    @GetMapping("/{uuid}/images")
     public List<ImageDTO> getImagesByConfigId(@PathVariable("uuid") UUID uuid) {
-
         return configService.getImagesByConfigUUID(uuid);
     }
 }
