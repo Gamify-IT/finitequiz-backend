@@ -286,7 +286,6 @@ public class ConfigService {
 
     public ImageDTO addImage(final ImageDTO imageDTO) {
         imageRepository.save(imageMapper.imageDTOToImage(imageDTO));
-        System.out.println("Aktuelle Inhalte im Repository: " + imageRepository.findAll());
         return imageDTO;
     }
 
