@@ -12,6 +12,5 @@ import java.util.UUID;
 @Repository
 public interface ImageRepository extends JpaRepository<Image, UUID> {
 
-    @Query("SELECT i FROM Image i WHERE i.imageUUID IN :imageUUIDs")
-    List<Image> findByImageUUIDIn(@Param("imageUUIDs") List<String> imageUUIDs);
+    List<Image> findByImageUUID(UUID imageUUID);
 }

@@ -291,7 +291,7 @@ public class ConfigService {
 
     public List<ImageDTO> getImagesByConfigUUID(UUID uuid) {
 
-        List<Image> images = imageRepository.findByImageUUIDIn(List.of(uuid.toString()));
+        List<Image> images = imageRepository.findByImageUUID(uuid);
 
         return images.stream()
                 .map(image -> imageMapper.imageToImageDTO(image))

@@ -194,7 +194,10 @@ public class ConfigController {
     }
 
     @GetMapping("/{uuid}/images")
-    public List<ImageDTO> getImagesByConfigId(@PathVariable("uuid") UUID uuid) {
+    public List<ImageDTO> getImagesByConfigId(@PathVariable("uuid") String uuidString) {
+        UUID uuid = UUID.fromString(uuidString);
         return configService.getImagesByConfigUUID(uuid);
     }
+
+
 }

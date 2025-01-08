@@ -52,14 +52,17 @@ public class Question {
     @ElementCollection
     Set<String> wrongAnswers;
 
-    public Question(final String text, final String rightAnswer, final Set<String> wrongAnswers) {
+    String uuid;
+
+    public Question(final String text, final String rightAnswer, final Set<String> wrongAnswers, final String uuid) {
         this.text = text;
         this.rightAnswer = rightAnswer;
         this.wrongAnswers = wrongAnswers;
+        this.uuid = uuid;
     }
 
     @Override
     public Question clone() {
-        return new Question(this.text, this.rightAnswer, new HashSet<>(this.wrongAnswers));
+        return new Question(this.text, this.rightAnswer, new HashSet<>(this.wrongAnswers), this.uuid);
     }
 }

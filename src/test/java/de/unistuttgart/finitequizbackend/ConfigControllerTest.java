@@ -117,7 +117,7 @@ class ConfigControllerTest {
     @Test
     void createConfiguration() throws Exception {
         final ConfigurationDTO newCreatedConfigurationDTO = new ConfigurationDTO(
-            Set.of(new QuestionDTO("Is this a new configuration?", "Yes", Set.of("Maybe", "No")))
+            Set.of(new QuestionDTO("Is this a new configuration?", "Yes", Set.of("Maybe", "No"),"123"))
         );
         final String bodyValue = objectMapper.writeValueAsString(newCreatedConfigurationDTO);
         final MvcResult result = mvc
@@ -145,7 +145,7 @@ class ConfigControllerTest {
     @Test
     void updateConfiguration() throws Exception {
         final Set<QuestionDTO> newQuestionsDTO = Set.of(
-            new QuestionDTO("Is this a new configuration?", "Yes", Set.of("Maybe", "No"))
+            new QuestionDTO("Is this a new configuration?", "Yes", Set.of("Maybe", "No"), "123443")
         );
         initialConfigDTO.setQuestions(newQuestionsDTO);
         final String bodyValue = objectMapper.writeValueAsString(initialConfigDTO);
@@ -198,7 +198,8 @@ class ConfigControllerTest {
         final QuestionDTO addedQuestionDTO = new QuestionDTO(
             "What is this question about?",
             "Question",
-            Set.of("Nothing", "Everything")
+            Set.of("Nothing", "Everything"),
+                "2233"
         );
 
         final String bodyValue = objectMapper.writeValueAsString(addedQuestionDTO);

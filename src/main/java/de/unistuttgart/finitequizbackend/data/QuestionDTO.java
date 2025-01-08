@@ -48,10 +48,13 @@ public class QuestionDTO {
      */
     Set<String> wrongAnswers;
 
-    public QuestionDTO(final String text, final String rightAnswer, final Set<String> wrongAnswers) {
+    String uuid;
+
+    public QuestionDTO(final String text, final String rightAnswer, final Set<String> wrongAnswers, final String uuid) {
         this.text = text;
         this.rightAnswer = rightAnswer;
         this.wrongAnswers = wrongAnswers;
+        this.uuid = uuid;
     }
 
     public boolean equalsContent(final QuestionDTO other) {
