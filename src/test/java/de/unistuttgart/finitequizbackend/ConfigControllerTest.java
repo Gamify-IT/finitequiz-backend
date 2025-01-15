@@ -68,12 +68,12 @@ class ConfigControllerTest {
         configurationRepository.deleteAll();
         final Question questionOne = new Question();
         questionOne.setText("Are you cool?");
-        questionOne.setRightAnswer("Yes");
+        questionOne.setRightAnswer(Set.of("123", "12333"));
         questionOne.setWrongAnswers(Set.of("No", "Maybe"));
 
         final Question questionTwo = new Question();
         questionTwo.setText("Is this game cool?");
-        questionTwo.setRightAnswer("Yes");
+        questionTwo.setRightAnswer(Set.of("123", "12333"));
         questionTwo.setWrongAnswers(Set.of("No", "Maybe"));
 
         final Configuration configuration = new Configuration();
@@ -117,7 +117,7 @@ class ConfigControllerTest {
     @Test
     void createConfiguration() throws Exception {
         final ConfigurationDTO newCreatedConfigurationDTO = new ConfigurationDTO(
-            Set.of(new QuestionDTO("Is this a new configuration?", "Yes", Set.of("Maybe", "No"),"123"))
+            Set.of(new QuestionDTO("Is this a new configuration?", Set.of("123", "12333"), Set.of("Maybe", "No"),"123"))
         );
         final String bodyValue = objectMapper.writeValueAsString(newCreatedConfigurationDTO);
         final MvcResult result = mvc
@@ -145,7 +145,7 @@ class ConfigControllerTest {
     @Test
     void updateConfiguration() throws Exception {
         final Set<QuestionDTO> newQuestionsDTO = Set.of(
-            new QuestionDTO("Is this a new configuration?", "Yes", Set.of("Maybe", "No"), "123443")
+            new QuestionDTO("Is this a new configuration?", Set.of("123", "12333"), Set.of("Maybe", "No"), "123443")
         );
         initialConfigDTO.setQuestions(newQuestionsDTO);
         final String bodyValue = objectMapper.writeValueAsString(initialConfigDTO);
@@ -197,7 +197,7 @@ class ConfigControllerTest {
     void addQuestionToExistingConfiguration() throws Exception {
         final QuestionDTO addedQuestionDTO = new QuestionDTO(
             "What is this question about?",
-            "Question",
+                Set.of("123", "12333"),
             Set.of("Nothing", "Everything"),
                 "2233"
         );

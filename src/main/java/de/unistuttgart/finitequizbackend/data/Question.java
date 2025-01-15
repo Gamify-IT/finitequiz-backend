@@ -42,9 +42,8 @@ public class Question {
     /**
      * The correct answer.
      */
-    @NotNull(message = "right answer cannot be null")
-    @NotBlank(message = "right answer cannot be blank")
-    String rightAnswer;
+    @ElementCollection
+    Set<String> rightAnswer;
 
     /**
      * A list of wrong answers.
@@ -54,7 +53,7 @@ public class Question {
 
     String uuid;
 
-    public Question(final String text, final String rightAnswer, final Set<String> wrongAnswers, final String uuid) {
+    public Question(final String text, final Set<String> rightAnswer, final Set<String> wrongAnswers, final String uuid) {
         this.text = text;
         this.rightAnswer = rightAnswer;
         this.wrongAnswers = wrongAnswers;

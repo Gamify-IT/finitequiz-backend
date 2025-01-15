@@ -39,10 +39,7 @@ public class QuestionDTO {
     /**
      * The correct answer.
      */
-    @NotNull(message = "right answer cannot be null")
-    @NotBlank(message = "right answer cannot be blank")
-    String rightAnswer;
-
+    Set<String> rightAnswer;
     /**
      * A list of wrong answers.
      */
@@ -50,7 +47,7 @@ public class QuestionDTO {
 
     String uuid;
 
-    public QuestionDTO(final String text, final String rightAnswer, final Set<String> wrongAnswers, final String uuid) {
+    public QuestionDTO(final String text, final Set<String> rightAnswer, final Set<String> wrongAnswers, final String uuid) {
         this.text = text;
         this.rightAnswer = rightAnswer;
         this.wrongAnswers = wrongAnswers;
