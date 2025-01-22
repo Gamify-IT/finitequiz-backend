@@ -49,11 +49,10 @@ public class Question {
      * A list of wrong answers.
      */
     @ElementCollection
-    Set<String> wrongAnswers;
-
+    Set<WrongAnswer> wrongAnswers;
     String uuid;
 
-    public Question(final String text, final Set<String> rightAnswer, final Set<String> wrongAnswers, final String uuid) {
+    public Question(final String text, final Set<String> rightAnswer, final Set<WrongAnswer> wrongAnswers, final String uuid) {
         this.text = text;
         this.rightAnswer = rightAnswer;
         this.wrongAnswers = wrongAnswers;

@@ -40,14 +40,14 @@ public class QuestionDTO {
      * The correct answer.
      */
     Set<String> rightAnswer;
+
     /**
      * A list of wrong answers.
      */
-    Set<String> wrongAnswers;
-
+    Set<WrongAnswerDTO> wrongAnswers;
     String uuid;
 
-    public QuestionDTO(final String text, final Set<String> rightAnswer, final Set<String> wrongAnswers, final String uuid) {
+    public QuestionDTO(final String text, final Set<String> rightAnswer, final Set<WrongAnswerDTO> wrongAnswers, final String uuid) {
         this.text = text;
         this.rightAnswer = rightAnswer;
         this.wrongAnswers = wrongAnswers;

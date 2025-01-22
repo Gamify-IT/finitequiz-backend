@@ -1,15 +1,13 @@
 package de.unistuttgart.finitequizbackend;
 
+import static java.util.Optional.of;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.unistuttgart.finitequizbackend.data.Configuration;
-import de.unistuttgart.finitequizbackend.data.ConfigurationDTO;
-import de.unistuttgart.finitequizbackend.data.Question;
-import de.unistuttgart.finitequizbackend.data.QuestionDTO;
+import de.unistuttgart.finitequizbackend.data.*;
 import de.unistuttgart.finitequizbackend.data.mapper.ConfigurationMapper;
 import de.unistuttgart.finitequizbackend.data.mapper.QuestionMapper;
 import de.unistuttgart.finitequizbackend.repositories.ConfigurationRepository;
@@ -62,6 +60,8 @@ class ConfigControllerTest {
     private ObjectMapper objectMapper;
     private Configuration initialConfig;
     private ConfigurationDTO initialConfigDTO;
+    WrongAnswer wrongAnswer = new WrongAnswer();
+    WrongAnswerDTO wrongAnswerDTO = new WrongAnswerDTO();
 
     @BeforeEach
     public void createBasicData() {
@@ -69,12 +69,12 @@ class ConfigControllerTest {
         final Question questionOne = new Question();
         questionOne.setText("Are you cool?");
         questionOne.setRightAnswer(Set.of("123", "12333"));
-        questionOne.setWrongAnswers(Set.of("No", "Maybe"));
+        questionOne.setWrongAnswers(Set.of(wrongAnswer));
 
         final Question questionTwo = new Question();
         questionTwo.setText("Is this game cool?");
         questionTwo.setRightAnswer(Set.of("123", "12333"));
-        questionTwo.setWrongAnswers(Set.of("No", "Maybe"));
+        questionTwo.setWrongAnswers(Set.of(wrongAnswer));
 
         final Configuration configuration = new Configuration();
         configuration.setQuestions(Set.of(questionOne, questionTwo));
@@ -117,7 +117,7 @@ class ConfigControllerTest {
     @Test
     void createConfiguration() throws Exception {
         final ConfigurationDTO newCreatedConfigurationDTO = new ConfigurationDTO(
-            Set.of(new QuestionDTO("Is this a new configuration?", Set.of("123", "12333"), Set.of("Maybe", "No"),"123"))
+            Set.of(new QuestionDTO("Is this a new configuration?", Set.of("123", "12333"), Set.of(wrongAnswerDTO),"123"))
         );
         final String bodyValue = objectMapper.writeValueAsString(newCreatedConfigurationDTO);
         final MvcResult result = mvc
@@ -145,7 +145,7 @@ class ConfigControllerTest {
     @Test
     void updateConfiguration() throws Exception {
         final Set<QuestionDTO> newQuestionsDTO = Set.of(
-            new QuestionDTO("Is this a new configuration?", Set.of("123", "12333"), Set.of("Maybe", "No"), "123443")
+            new QuestionDTO("Is this a new configuration?", Set.of("123", "12333"), Set.of(wrongAnswerDTO), "123443")
         );
         initialConfigDTO.setQuestions(newQuestionsDTO);
         final String bodyValue = objectMapper.writeValueAsString(initialConfigDTO);
@@ -198,7 +198,7 @@ class ConfigControllerTest {
         final QuestionDTO addedQuestionDTO = new QuestionDTO(
             "What is this question about?",
                 Set.of("123", "12333"),
-            Set.of("Nothing", "Everything"),
+                Set.of(wrongAnswerDTO),
                 "2233"
         );
 
