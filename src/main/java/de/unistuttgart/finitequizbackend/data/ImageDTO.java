@@ -22,4 +22,7 @@ public class ImageDTO {
     private UUID imageUUID;
 
     private byte[] image;
+
+    private String description;
+
 }

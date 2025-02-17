@@ -175,8 +175,10 @@ public class ConfigController {
     public ImageDTO addImage(
             @CookieValue("access_token") final String accessToken,
             @RequestParam("uuid") UUID uuid,
-            @RequestParam("image") MultipartFile image
+            @RequestParam("image") MultipartFile image,
+            @RequestParam(value = "description", required = false) String description 
     ) throws IOException {
+
         jwtValidatorService.validateTokenOrThrow(accessToken);
 
         byte[] imageBytes = image.getBytes();
@@ -188,10 +190,16 @@ public class ConfigController {
         imageDTO.setImageUUID(uuid);
         imageDTO.setImage(imageBytes);
 
-        log.debug(String.valueOf(imageDTO.getImageUUID()));
+        if (description != null) {
+            imageDTO.setDescription(description);
+        }
+
+        log.debug("Image UUID: {}", imageDTO.getImageUUID());
+        log.debug("Description: {}", imageDTO.getDescription());
 
         return configService.addImage(imageDTO);
     }
+
 
     @GetMapping("/{uuid}/images")
     public List<ImageDTO> getImagesByConfigId(@PathVariable("uuid") String uuidString) {

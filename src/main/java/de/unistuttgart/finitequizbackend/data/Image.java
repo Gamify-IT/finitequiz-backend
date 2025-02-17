@@ -24,4 +24,5 @@ public class Image {
     UUID id;
     private UUID imageUUID;
     private byte[] image;
+    private String description;
 }
