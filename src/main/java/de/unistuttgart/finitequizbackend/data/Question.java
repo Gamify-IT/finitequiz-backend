@@ -1,6 +1,7 @@
 package de.unistuttgart.finitequizbackend.data;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.ElementCollection;
@@ -43,7 +44,7 @@ public class Question {
      * The correct answer.
      */
     @ElementCollection
-    Set<String> rightAnswer;
+    List<String> rightAnswer;
 
     /**
      * A list of wrong answers.
@@ -52,7 +53,7 @@ public class Question {
     Set<WrongAnswer> wrongAnswers;
     String uuid;
 
-    public Question(final String text, final Set<String> rightAnswer, final Set<WrongAnswer> wrongAnswers, final String uuid) {
+    public Question(final String text, final List<String> rightAnswer, final Set<WrongAnswer> wrongAnswers, final String uuid) {
         this.text = text;
         this.rightAnswer = rightAnswer;
         this.wrongAnswers = wrongAnswers;

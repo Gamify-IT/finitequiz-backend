@@ -1,5 +1,6 @@
 package de.unistuttgart.finitequizbackend.data;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -39,7 +40,7 @@ public class QuestionDTO {
     /**
      * The correct answer.
      */
-    Set<String> rightAnswer;
+    List<String> rightAnswer; ;
 
     /**
      * A list of wrong answers.
@@ -47,7 +48,7 @@ public class QuestionDTO {
     Set<WrongAnswerDTO> wrongAnswers;
     String uuid;
 
-    public QuestionDTO(final String text, final Set<String> rightAnswer, final Set<WrongAnswerDTO> wrongAnswers, final String uuid) {
+    public QuestionDTO(final String text, final List<String> rightAnswer, final Set<WrongAnswerDTO> wrongAnswers, final String uuid) {
         this.text = text;
         this.rightAnswer = rightAnswer;
         this.wrongAnswers = wrongAnswers;
