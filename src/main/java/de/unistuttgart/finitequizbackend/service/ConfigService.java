@@ -2,11 +2,14 @@ package de.unistuttgart.finitequizbackend.service;
 
 import de.unistuttgart.finitequizbackend.data.*;
 import de.unistuttgart.finitequizbackend.data.mapper.ConfigurationMapper;
+import de.unistuttgart.finitequizbackend.data.mapper.ImageMapper;
 import de.unistuttgart.finitequizbackend.data.mapper.QuestionMapper;
 import de.unistuttgart.finitequizbackend.repositories.ConfigurationRepository;
+import de.unistuttgart.finitequizbackend.repositories.ImageRepository;
 import de.unistuttgart.finitequizbackend.repositories.QuestionRepository;
 import de.unistuttgart.finitequizbackend.clients.OverworldClient;
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import de.unistuttgart.gamifyit.authentificationvalidator.JWTValidatorService;
@@ -32,10 +35,16 @@ public class ConfigService {
     ConfigurationMapper configurationMapper;
 
     @Autowired
+    ImageMapper imageMapper;
+
+    @Autowired
     ConfigurationRepository configurationRepository;
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    private ImageRepository imageRepository;
 
     @Autowired
     private OverworldClient overworldClient;
@@ -56,19 +65,19 @@ public class ConfigService {
             throw new IllegalArgumentException("id is null");
         }
         return configurationRepository
-            .findById(id)
-            .orElseThrow(() ->
-                new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    String.format("There is no configuration with id %s.", id)
-                )
-            );
+                .findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("There is no configuration with id %s.", id)
+                        )
+                );
     }
 
     /**
      * Search a configuration by given id and get volume level from overworld-backend
      *
-     * @param id the id of the configuration searching for
+     * @param id          the id of the configuration searching for
      * @param accessToken the users access token
      * @return the found configuration
      * @throws ResponseStatusException  when configuration by configurationName could not be found
@@ -125,7 +134,7 @@ public class ConfigService {
             throw new IllegalArgumentException("configurationDTO is null");
         }
         final Configuration savedConfiguration = configurationRepository.save(
-            configurationMapper.configurationDTOToConfiguration(configurationDTO)
+                configurationMapper.configurationDTOToConfiguration(configurationDTO)
         );
         return configurationMapper.configurationToConfigurationDTO(savedConfiguration);
     }
@@ -201,12 +210,12 @@ public class ConfigService {
         }
         final Configuration configuration = getConfiguration(id);
         final Question question = getQuestionInConfiguration(questionId, configuration)
-            .orElseThrow(() ->
-                new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    String.format("Question with ID %s does not exist in configuration %s.", questionId, configuration)
-                )
-            );
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Question with ID %s does not exist in configuration %s.", questionId, configuration)
+                        )
+                );
         configuration.removeQuestion(question);
         configurationRepository.save(configuration);
         questionRepository.delete(question);
@@ -224,9 +233,9 @@ public class ConfigService {
      * @throws IllegalArgumentException if at least one of the arguments is null
      */
     public QuestionDTO updateQuestionFromConfiguration(
-        final UUID id,
-        final UUID questionId,
-        final @Valid QuestionDTO questionDTO
+            final UUID id,
+            final UUID questionId,
+            final @Valid QuestionDTO questionDTO
     ) {
         if (id == null || questionId == null || questionDTO == null) {
             throw new IllegalArgumentException("id or questionId or questionDTO is null");
@@ -234,8 +243,8 @@ public class ConfigService {
         final Configuration configuration = getConfiguration(id);
         if (getQuestionInConfiguration(questionId, configuration).isEmpty()) {
             throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                String.format("Question with ID %s does not exist in configuration %s.", questionId, configuration)
+                    HttpStatus.NOT_FOUND,
+                    String.format("Question with ID %s does not exist in configuration %s.", questionId, configuration)
             );
         }
         final Question question = questionMapper.questionDTOToQuestion(questionDTO);
@@ -252,13 +261,13 @@ public class ConfigService {
      */
     public UUID cloneConfiguration(final UUID id) {
         Configuration config = configurationRepository
-            .findById(id)
-            .orElseThrow(() ->
-                new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    String.format("Configuration with id %s not found", id)
-                )
-            );
+                .findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                String.format("Configuration with id %s not found", id)
+                        )
+                );
         Configuration cloneConfig = config.clone();
         cloneConfig = configurationRepository.save(cloneConfig);
         return cloneConfig.getId();
@@ -272,16 +281,31 @@ public class ConfigService {
      * @throws IllegalArgumentException if at least one of the arguments is null
      */
     private Optional<Question> getQuestionInConfiguration(
-        final UUID questionId,
-        final @Valid Configuration configuration
+            final UUID questionId,
+            final @Valid Configuration configuration
     ) {
         if (questionId == null || configuration == null) {
             throw new IllegalArgumentException("questionId or configuration is null");
         }
         return configuration
-            .getQuestions()
-            .parallelStream()
-            .filter(filteredQuestion -> filteredQuestion.getId().equals(questionId))
-            .findAny();
+                .getQuestions()
+                .parallelStream()
+                .filter(filteredQuestion -> filteredQuestion.getId().equals(questionId))
+                .findAny();
     }
+
+    public ImageDTO addImage(final ImageDTO imageDTO) {
+        imageRepository.save(imageMapper.imageDTOToImage(imageDTO));
+        return imageDTO;
+    }
+
+    public List<ImageDTO> getImagesByConfigUUID(UUID uuid) {
+
+        List<Image> images = imageRepository.findByImageUUID(uuid);
+
+        return images.stream()
+                .map(image -> imageMapper.imageToImageDTO(image))
+                .collect(Collectors.toList());
+    }
+
 }

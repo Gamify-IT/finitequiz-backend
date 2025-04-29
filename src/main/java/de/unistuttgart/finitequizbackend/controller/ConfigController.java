@@ -1,12 +1,15 @@
 package de.unistuttgart.finitequizbackend.controller;
 
 import de.unistuttgart.finitequizbackend.data.ConfigurationDTO;
+import de.unistuttgart.finitequizbackend.data.ImageDTO;
 import de.unistuttgart.finitequizbackend.data.QuestionDTO;
 import de.unistuttgart.finitequizbackend.data.mapper.ConfigurationMapper;
 import de.unistuttgart.finitequizbackend.data.mapper.QuestionMapper;
 import de.unistuttgart.finitequizbackend.repositories.ConfigurationRepository;
 import de.unistuttgart.finitequizbackend.service.ConfigService;
 import de.unistuttgart.gamifyit.authentificationvalidator.JWTValidatorService;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -17,6 +20,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 
 /**
  * This controller handles all game-configuration-related REST-APIs
@@ -163,4 +169,43 @@ public class ConfigController {
         jwtValidatorService.hasRolesOrThrow(accessToken, LECTURER);
         return configService.cloneConfiguration(id);
     }
+
+    @PostMapping("/images")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ImageDTO addImage(
+            @CookieValue("access_token") final String accessToken,
+            @RequestParam("uuid") UUID uuid,
+            @RequestParam("image") MultipartFile image,
+            @RequestParam(value = "description", required = false) String description 
+    ) throws IOException {
+
+        jwtValidatorService.validateTokenOrThrow(accessToken);
+
+        byte[] imageBytes = image.getBytes();
+        if (imageBytes.length == 0) {
+            throw new IllegalArgumentException("Die hochgeladene Datei ist leer.");
+        }
+
+        ImageDTO imageDTO = new ImageDTO();
+        imageDTO.setImageUUID(uuid);
+        imageDTO.setImage(imageBytes);
+
+        if (description != null) {
+            imageDTO.setDescription(description);
+        }
+
+        log.debug("Image UUID: {}", imageDTO.getImageUUID());
+        log.debug("Description: {}", imageDTO.getDescription());
+
+        return configService.addImage(imageDTO);
+    }
+
+
+    @GetMapping("/{uuid}/images")
+    public List<ImageDTO> getImagesByConfigId(@PathVariable("uuid") String uuidString) {
+        UUID uuid = UUID.fromString(uuidString);
+        return configService.getImagesByConfigUUID(uuid);
+    }
+
+
 }

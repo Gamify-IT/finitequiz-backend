@@ -1,6 +1,7 @@
 package de.unistuttgart.finitequizbackend.data;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import javax.persistence.ElementCollection;
@@ -42,24 +43,25 @@ public class Question {
     /**
      * The correct answer.
      */
-    @NotNull(message = "right answer cannot be null")
-    @NotBlank(message = "right answer cannot be blank")
-    String rightAnswer;
+    @ElementCollection
+    List<String> rightAnswer;
 
     /**
      * A list of wrong answers.
      */
     @ElementCollection
-    Set<String> wrongAnswers;
+    Set<WrongAnswer> wrongAnswers;
+    String uuid;
 
-    public Question(final String text, final String rightAnswer, final Set<String> wrongAnswers) {
+    public Question(final String text, final List<String> rightAnswer, final Set<WrongAnswer> wrongAnswers, final String uuid) {
         this.text = text;
         this.rightAnswer = rightAnswer;
         this.wrongAnswers = wrongAnswers;
+        this.uuid = uuid;
     }
 
     @Override
     public Question clone() {
-        return new Question(this.text, this.rightAnswer, new HashSet<>(this.wrongAnswers));
+        return new Question(this.text, this.rightAnswer, new HashSet<>(this.wrongAnswers), this.uuid);
     }
 }
